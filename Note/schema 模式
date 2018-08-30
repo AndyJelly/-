@@ -1,0 +1,69 @@
+一、schema是什么？为什么使用schema？
+0、任何给定的与服务器的客户连接都只能访问在一个数据库里的数据，就是那个在连接请求里声明的。即一个连接只能访问一个数据库。
+
+1、一个数据库包含一个或多个命名的 模式， 模式又包含表。模式还包含其它命名的对象，包括数据类型，函数， 以及操作符。同一个对象名可以在不同的模式里使用而不会导致冲突；
+
+2、模式类似于操作系统层次的目录，只不过模式不能嵌套
+
+3、第三方的应用可以放在不同的模式中， 这样它们就不会和其它对象的名字冲突。
+
+二、
+创建模式
+CREATE SCHEMA demo_schema;
+
+在模式下新建表
+CREATE TABLE demo_schema.operation_log_info(
+    ID SERIAL PRIMARY KEY,
+    log_type INTEGER  NOT NULL,
+		log_level INTEGER NOT NULL DEFAULT 0,
+    occur_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    user_id INTEGER,
+    user_name varchar(256),
+    login_ip_address varchar(32),
+    client_type INTEGER NOT NULL DEFAULT -1,
+    occur_local_time TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
+    time_offset INTEGER,
+    main_error_code INTEGER,
+    sub_error_code INTEGER,
+		description varchar(1024)
+);
+
+删除一个空的schema
+DROP SCHEMA demo_schema;
+
+删除一个模式以及模式里面所有的对象
+DROP SCHEMA  demo_schema CASCADE;
+
+在创建表时，如果没有指定schema,则表会自动被归属到一个叫做'public‘的模式中，每一个数据库中都会有一个这样的模式。下面两种创建表的方式是等效的：
+
+CREATE TABLE tableName(...);
+和
+
+CREATE TABLE public.tableName(...);
+
+
+三、模式和权限
+1、缺省时，用户看不到模式中不属于他们所有的对象。 为了让他们看得见，模式的所有者需要在模式上赋予 USAGE 权限。
+
+2、用户也可以允许在别人的模式里创建对象。要允许这么做， 我们需要赋予在该模式上的 CREATE 权限。
+缺省时，每个人都在 public 模式上 有 CREATE 权限。
+
+3、如果你不允许这么做， 你可以撤销这个权限：
+REVOKE CREATE ON public FROM PUBLIC;
+（第一个 "public" 是模式，第二个 "public" 意思是"所有用户"。 第一句里它是个标识符，而第二句里是个关键字，所以有不同的大小写）
+
+四、模式搜索路径
+全称的名字写起来非常费劲，并且我们最好不要在应用里直接 写上特定的模式名
+查看当前搜索路径，使用命令：
+SHOW search_path;
+search_path
+--------------
+ $user,public
+第一个元素声明将要搜索一个和当前用户同名的模式。 因为还没有这样的模式存在，所以这条记录被忽略。第二个元素指向public模式。
+要把新的模式放到路径中来，我们用
+SET search_path TO myschema,public;
+
+
+
+
+
