@@ -13,19 +13,7 @@ CREATE SCHEMA demo_schema;
 
 在模式下新建表
 CREATE TABLE demo_schema.operation_log_info(
-    ID SERIAL PRIMARY KEY,
-    log_type INTEGER  NOT NULL,
-		log_level INTEGER NOT NULL DEFAULT 0,
-    occur_time TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-    user_id INTEGER,
-    user_name varchar(256),
-    login_ip_address varchar(32),
-    client_type INTEGER NOT NULL DEFAULT -1,
-    occur_local_time TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT NOW(),
-    time_offset INTEGER,
-    main_error_code INTEGER,
-    sub_error_code INTEGER,
-		description varchar(1024)
+...
 );
 
 删除一个空的schema
@@ -63,7 +51,7 @@ search_path
 要把新的模式放到路径中来，我们用
 SET search_path TO myschema,public;
 
-
+https://www.cnblogs.com/xiwang/p/5695309.html
 
 
 
