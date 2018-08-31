@@ -1,0 +1,52 @@
+0、约束数据表列执行的规则。
+以下是常用的限制 
+NOT NULL Constraint: 确保列不能有NULL值。 
+UNIQUE Constraint: 确保所有列中的值是不同的。
+PRIMARY Key: 唯一标识数据库表中的各行/记录。
+FOREIGN Key: 约束基于其他表于的列的数据。
+CHECK Constraint: CHECK约束，确保一列中的所有值满足一定条件。
+
+1、NOT NULL 约束
+默认情况下，列可以保存NULL值。如果不希望一列具有NULL值，那么需要在此列指定NULL约束定义。 NOT NULL约束总是写成一列约束。
+
+2、UNIQUE 约束
+唯一约束防止两个记录在一个特定的列具有相同的值。
+
+3、PRIMARY KEY 约束
+数据库表中的PRIMARY KEY约束唯一标识每条记录。可以有多个UNIQUE的列，但在一个表中只有一个主键。
+主键是唯一标识数据库表中的各行/记录表中的一个字段。主键必须包含唯一值。主键列不能有NULL值。
+一个表只能有一个主键，它可以由一个或多个字段。当多个字段作为主键，它们被称为复合键。
+
+创建表时，直接在字段后面按加上PRIMARY KEY 作为主键约束
+CREATE TABLE COMPANY4(
+   ID INT PRIMARY KEY     NOT NULL,
+   NAME           TEXT    NOT NULL,
+   AGE            INT     NOT NULL,
+   ADDRESS        CHAR(50),
+   SALARY         REAL
+); 
+此时生成的主键名称默认为 "表名_pkey"
+
+or 创建表时，同时显式的创建主键约束，指定主键名称id_key
+constraint id_key primary key (ID)
+
+or
+创建表时，在创建表的最后声明主键约束
+PRIMARY KEY (ID)
+此时生成的主键名称默认为 "表名_pkey"
+
+or 创建完表之后，再去创建唯一约束
+alter table COMPANY4 add constraint name_age_unique unique (NAME, AGE);
+
+创建完表之后徐，可以使用psql \d table_name 查看对应的表结构以及约束、索引
+
+删除约束
+alter table company4 drop constraint company4_pkey;
+删除之后，再去使用psql查看该表时，可以看到已经没有对应的约束了
+
+
+
+4、FOREIGN KEY 约束
+外键约束指定一列（或一组列）中的值必须符合另一个表中出现的一些行。我们说这是维持两个相关的表之间的引用完整性
+FOREIGN KEY 约束用于预防破坏表之间连接的动作。
+FOREIGN KEY 约束也能防止非法数据插入外键列，因为它必须是它指向的那个表中的值之一。
